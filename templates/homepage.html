@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    {% load static %}
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>pyCasts!</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="{% static 'main.css' %}" />
+  </head>
+
+  <script>
+    function showEpisodes(itemName) {
+      //itemName = e.target.name
+      console.log(itemName)
+      
+      itemToModify = document.querySelector(`#whereEpisodesAre > #${itemName}`)
+
+      listOfEpisodes = document.querySelectorAll("#whereEpisodesAre > div")
+
+      listOfEpisodes.forEach(item => {
+        item.style.display = "none"
+      });
+      itemToModify.style.display = "block"
+
+    }
+
+  </script>
+
+  <body class="d-flex flex-column">
+    
+    {% load custom_tags %}
+
+    <nav class="navbar navbar-light navbar-expand-lg bg-light">
+      <span class="navbar-brand mt-0 h3">Podcasts</span>
+    
+    </nav>
+
+    <nav class="navbar navbar-light navbar-expand-lg bg-light">
+
+
+      {% for channel, content in channels.items%}
+
+      <span>
+        <button onclick="showEpisodes('{{ channelsInfo|getChannelKey:channel}}')"  name="{{ channel }}">
+          {{ channel }}
+        </button>
+      </span>
+
+      {% endfor%}
+
+
+
+    </nav>
+
+
+
+
+
+    <main class="container flex-grow-1">
+      <div class="row" id="whereEpisodesAre">
+
+        {% for channel, content in channels.items %}
+
+          <div class="col" style="display: none;" name="{{ channel }}" id="{{ channelsInfo|getChannelKey:channel}}">
+            {% for episode in content %}
+            <section class="card mb-3">
+              <div class="row no-gutters">
+                <div class="col-md-2 my-auto">
+                  <img
+                    src="{{ episode.image }}"
+                    class="img-fluid ml-3 my-3"
+                    alt="{{ episode.podcast_name }}"
+                  />
+                </div>
+                <div class="col-md-10">
+                  <div class="card-body ml-3">
+                    <h3 class="card-title">{{ episode.title }}</h3>
+                    <p class="card-text">{{ episode.description }}</p>
+                    <a href="{{ episode.link }}">
+                      <p class="card-text">🎧 Listen to this episode</p>
+                    </a>
+
+                    <p class="card-text"> {{ episode.guid}} </p>
+                    <p class="card-text"> {{ episode.pub_date}} </p>
+                    <!-- <p class="card-text"> {{ episode.pub_date_sec}} </p> -->
+
+                  </div>
+                </div>
+              </div>
+            </section>
+            {% endfor %}
+          </div>
+
+
+        {% endfor %}
+        
+      </div>
+    </main>
+
+    <footer class="container-fluid">
+      <div class="row">
+        <div class="col text-center">
+        </div>
+      </div>
+    </footer>
+
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+      integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>
